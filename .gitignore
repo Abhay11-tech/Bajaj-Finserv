@@ -1,9 +1,13 @@
+# Virtual Environment
 venv/
-__pycache__/*.pyc
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
 *.pyo
 *.pyd
 .Python
-env/
 build/
 develop-eggs/
 dist/
