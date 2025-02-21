@@ -1,29 +1,18 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Union
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-app = FastAPI()
+app = Flask(__name__)
+CORS(app)
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
-# Request model
-class DataRequest(BaseModel):
-    data: List[str]
+@app.route('/bfhl', methods=['POST'])
+def process_data():
+    data = request.get_json()
 
-@app.post("/bfhl")
-async def process_data(request: DataRequest):
     numbers = []
     alphabets = []
 
-    for item in request.data:
+    for item in data.get("data", []):
         if item.isdigit():
             numbers.append(item)
         else:
@@ -38,12 +27,11 @@ async def process_data(request: DataRequest):
         "array_for_alphabets": alphabets,
         "is_success": True
     }
-    return response
+    return jsonify(response), 200
 
-@app.get("/bfhl")
-async def get_operation_code():
-    return {"operation_code": 1}
+@app.route('/bfhl', methods=['GET'])
+def get_operation_code():
+    return jsonify({"operation_code": 1}), 200
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+if __name__ == '__main__':
+    app.run(debug=True)
