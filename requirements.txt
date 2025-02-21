@@ -3,3 +3,4 @@ fastapi[standard]
 flask-cors
 gunicorn
 Werkzeug
+ uvicorn
